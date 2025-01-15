@@ -1,12 +1,16 @@
-from odoo import models, fields
-class GestionCommandes(models.Model):
- _name = 'gestion.commandes'
- _description = 'Gestion des Commandes'
- name = fields.Char(string='Nom de la commande', required=True)
- date_commande = fields.Datetime(string='Date de la commande',
-default=fields.Datetime.now)
- client_id = fields.Many2one('res.partner', string='Client',
-required=True)
- total = fields.Float(string='Total', required=True)
- status = fields.Selection([('draft', 'Brouillon'), ('confirmed',
-'Confirmée'), ('done', 'Livrée')], default='draft')
+from odoo import models, fields, api
+
+class Commande(models.Model):
+    _name = 'gestion.commande'
+    _description = 'Gestion des Commandes'
+
+    name = fields.Char(string='Numéro de Commande', required=True)
+    customer_id = fields.Many2one('res.partner', string='Client', required=True)
+    order_date = fields.Date(string='Date de Commande', default=fields.Date.today)
+    product_ids = fields.Many2many('product.product', string='Produits')
+    total_amount = fields.Float(string='Montant Total', compute='_compute_total_amount', store=True)
+
+    @api.depends('product_ids')
+    def _compute_total_amount(self):
+        for record in self:
+            record.total_amount = sum(product.list_price for product in record.product_ids)
