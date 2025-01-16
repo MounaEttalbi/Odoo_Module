@@ -1,4 +1,5 @@
 <odoo>
+    <!-- Tree View -->
     <record id="view_gestion_commandes_tree" model="ir.ui.view">
         <field name="name">gestion.commandes.tree</field>
         <field name="model">gestion.commandes</field>
@@ -7,12 +8,13 @@
                 <field name="name"/>
                 <field name="date_commande"/>
                 <field name="client_id"/>
-                <field name="total"/>
+                <field name="total" options="{'widget': 'monetary'}"/>
                 <field name="status"/>
             </tree>
         </field>
     </record>
 
+    <!-- Form View -->
     <record id="view_gestion_commandes_form" model="ir.ui.view">
         <field name="name">gestion.commandes.form</field>
         <field name="model">gestion.commandes</field>
@@ -22,8 +24,8 @@
                     <group>
                         <field name="name"/>
                         <field name="date_commande"/>
-                        <field name="client_id"/>
-                        <field name="total"/>
+                        <field name="client_id" options="{'no_open': True}"/>
+                        <field name="total" options="{'widget': 'monetary'}"/>
                         <field name="status"/>
                     </group>
                 </sheet>
@@ -31,13 +33,18 @@
         </field>
     </record>
 
+    <!-- Menu Items -->
     <menuitem id="menu_gestion_commandes_root" name="Gestion Commandes" sequence="10"/>
 
-    <menuitem id="menu_gestion_commandes" name="Commandes" parent="menu_gestion_commandes_root" action="action_gestion_commandes"/>
-
+    
+    <!-- Action -->
     <record id="action_gestion_commandes" model="ir.actions.act_window">
         <field name="name">Commandes</field>
         <field name="res_model">gestion.commandes</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
     </record>
+
+    <menuitem id="menu_gestion_commandes" name="Commandes" parent="menu_gestion_commandes_root" action="action_gestion_commandes"/>
+
 </odoo>
